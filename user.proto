@@ -1,9 +1,0 @@
-syntax = "proto3";  // نستخدم الإصدار 3 من protobuf
-
-// تعريف رسالة مستخدم
-message User {
-  int32 id = 1;         // معرف المستخدم
-  string name = 2;      // اسم المستخدم
-  string email = 3;     // البريد الإلكتروني
-  repeated string tags = 4; // قائمة علامات مرتبطة بالمستخدم
-}
