@@ -1,0 +1,81 @@
+classDiagram
+    direction BT
+
+    class User {
+        +create_vm_from_template(template_name, project_id, custom_attrs)
+    }
+
+    class VMLifecycleManager {
+        -virtualMachinePool: VirtualMachinePool
+        -xmlTemplateManager: XMLTemplateManager
+        -vmBuilder: VirtualMachineBuilder
+        -vmManager: VirtualMachineManager
+        -db: RocksDBIntegration
+        +create_vm_from_template(template_name, project_id, custom_attrs): VMInfo
+    }
+
+    class VirtualMachinePool {
+        -usedVncPorts: Set~int~
+        -usedVmNames: Set~string~
+        -db: RocksDBIntegration
+        +request_resources(template_name, custom_attrs): AllocatedResources
+        +register_vm(vm_name, resources): void
+        +release_resources(resources): void
+        -generateUniqueName(base): string
+        -findAvailableVncPort(): int
+    }
+
+    class XMLTemplateManager {
+        -templatePath: string
+        +load_template(template_name): string
+    }
+
+    class VirtualMachineBuilder {
+        -baseXml: string
+        -name: string
+        -uuid: string
+        -memory: ulong
+        -vcpu: uint
+        -diskPath: string
+        -vncPort: int
+        +loadFromXml(xml): void
+        +setName(name): VirtualMachineBuilder
+        +setUuid(uuid): VirtualMachineBuilder
+        +setMemoryMiB(memory): VirtualMachineBuilder
+        +setCpuCount(vcpu): VirtualMachineBuilder
+        +setDisk(diskPath): VirtualMachineBuilder
+        +setVncPort(port): VirtualMachineBuilder
+        +build(): string
+        -buildDocument(): void
+    }
+
+    class VirtualMachineManager {
+        -db: RocksDBIntegration
+        -vmPool: VirtualMachinePool
+        +define_and_start_vm(vm_name, xml_config): Result~VMConnectionInfo~
+        +virsh_define(xml): bool
+        +virsh_start(vm_name): bool
+    }
+
+    class RocksDBIntegration {
+        -db: rocksdb::DB*
+        +put(key, value): bool
+        +get(key): string
+        +del(key): bool
+        +update(key, value): bool
+    }
+
+    %% العلاقات
+    User --> VMLifecycleManager : يستدعي
+    VMLifecycleManager --> VirtualMachinePool : يعتمد على
+    VMLifecycleManager --> XMLTemplateManager : يعتمد على
+    VMLifecycleManager --> VirtualMachineBuilder : يعتمد على
+    VMLifecycleManager --> VirtualMachineManager : يعتمد على
+    VMLifecycleManager --> RocksDBIntegration : يعتمد على
+
+    VirtualMachinePool --> RocksDBIntegration : يستخدم لحفظ/قراءة الموارد
+
+    VirtualMachineManager --> RocksDBIntegration : يسجل حالة VM
+    VirtualMachineManager --> VirtualMachinePool : يسجل/يحرر الموارد
+
+    VirtualMachineBuilder : يستخدم لبناء XML نهائي من القالب + التعديلات

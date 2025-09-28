@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include",     // 👈 جذر الهيدرز — يكفي!
+                "${workspaceFolder}/include/Core",
+                "/usr/include/**",
+                "/usr/local/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c23",                   // 👈 c23 غير مدعوم جيدًا بعد في أدوات كثيرة
+            "cppStandard": "c++23",               // 👈 c++23 قد لا يدعمه IntelliSense أو مترجمك
+            "intelliSenseMode": "linux-gcc-x64",  // 👈 لأنك تستخدم g++
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/include",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

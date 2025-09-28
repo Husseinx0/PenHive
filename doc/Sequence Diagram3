@@ -1,0 +1,12 @@
+sequenceDiagram
+    VMLifecycleManager->>VirtualMachinePool: create_vm_instance(template, attrs)
+    VirtualMachinePool-->>VMLifecycleManager: vm (هيكل أولي — بدون xml_config)
+
+    VMLifecycleManager->>XMLTemplateManager: load_template(template)
+    XMLTemplateManager-->>VMLifecycleManager: base_xml
+
+    VMLifecycleManager->>VirtualMachineBuilder: build_xml(base_xml, vm)
+    VirtualMachineBuilder-->>VMLifecycleManager: final_xml
+    Note right of VMLifecycleManager: 🎯 VirtualMachineBuilder وضع final_xml داخل vm.xml_config
+
+    VMLifecycleManager->>VirtualMachineManager: define_and_start_vm(vm)  // ← الآن vm.xml_config جاهز!
