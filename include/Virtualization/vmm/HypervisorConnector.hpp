@@ -17,8 +17,8 @@ public:
      *
      * @return 0 in sucuse
      */
-    [[nodiscard]] int allocate(int data, string name);
-    void set(int data, string name);
+    [[nodiscard]] int allocate(int data, std::string name);
+    void set(int data, std::string name);
 
 private:
     [[nodiscard]] std::string generate_uuid()
