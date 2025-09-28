@@ -1,48 +1,0 @@
-sequenceDiagram
-    autonumber
-    title إنشاء وتشغيل VM جديدة من قالب XML
-
-    participant User
-    participant VMLifecycleManager
-    participant VirtualMachinePool
-    participant XMLTemplateManager
-    participant VirtualMachineBuilder
-    participant VirtualMachineManager
-    participant RocksDBIntegration
-
-    Note over User,RocksDBIntegration: 🚀 بدء عملية إنشاء VM جديدة من قالب
-
-    User->>VMLifecycleManager: create_vm_from_template(template_name, project_id, custom_attrs)
-
-    VMLifecycleManager->>VirtualMachinePool: request_resources(template_name, custom_attrs)
-    VirtualMachinePool->>RocksDBIntegration: check_used_names/ports
-    RocksDBIntegration-->>VirtualMachinePool: (DB: used resources)
-    VirtualMachinePool-->>VMLifecycleManager: allocated_resources (vm_name, vnc_port, disk_path, ...)
-
-    VMLifecycleManager->>XMLTemplateManager: load_template(template_name)
-    XMLTemplateManager-->>VMLifecycleManager: base_xml_string
-
-    VMLifecycleManager->>VirtualMachineBuilder: build_xml(base_xml, allocated_resources, custom_attrs)
-    VirtualMachineBuilder-->>VMLifecycleManager: final_xml_config
-
-    VMLifecycleManager->>VirtualMachineManager: define_and_start_vm(vm_name, final_xml_config)
-    VirtualMachineManager->>RocksDBIntegration: save_vm_state(vm_name, "starting", final_attrs)
-    VirtualMachineManager->>VirtualMachineManager: virsh_define(xml) → virsh_start(vm_name)
-
-    alt نجاح التشغيل
-        VirtualMachineManager->>RocksDBIntegration: update_vm_state(vm_name, "running")
-        VirtualMachineManager->>VirtualMachinePool: register_vm(vm_name, allocated_resources)
-        VirtualMachineManager-->>VMLifecycleManager: success + connection_info
-
-        VMLifecycleManager->>RocksDBIntegration: link_vm_to_project(vm_name, project_id)
-        VMLifecycleManager-->>User: ✅ VM Running (VNC:5901, IP:192.168.100.5, ...)
-
-    else فشل التشغيل
-        VirtualMachineManager->>RocksDBIntegration: update_vm_state(vm_name, "error")
-        VirtualMachineManager->>VirtualMachinePool: release_resources(allocated_resources)
-        VirtualMachineManager-->>VMLifecycleManager: error_details
-
-        VMLifecycleManager-->>User: ❌ Failed to start VM: error_details
-    end
-
-    Note over User,RocksDBIntegration: 🔄 VM جاهزة للاستخدام — مبنية من القالب، مخصصة، ومرتبطة بالمشروع
