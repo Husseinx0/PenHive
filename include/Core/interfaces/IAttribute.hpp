@@ -113,12 +113,12 @@ public:
     }
 };
 
-class VectorAttribute final : public AttributeBase<VectorAttribute> {
+class VectorAttribute final : public IAttribute<VectorAttribute> {
 private:
     std::vector<std::pair<std::string, std::string>> attributes_;
     
 public:
-    explicit VectorAttribute(std::string_view name) : AttributeBase(name) {}
+    explicit VectorAttribute(std::string_view name) : IAttribute(name) {}
     
     // إضافة/استبدال سمات فرعية
     void add(std::string_view sub_name, std::string_view sub_value) {
@@ -141,7 +141,7 @@ public:
         return attributes_.empty() ? "" : attributes_.front().second;
     }
     
-    void replace_impl(std::string_view new_value) override {
+    void replace_impl(std::string_view new_value)  {
         if (!attributes_.empty()) {
             attributes_.front().second = new_value;
         }

@@ -3,5 +3,5 @@
 
 
 void VirtualMachineManager::dispatch_deploy(int vID){
-    
+    auto vm = 
 }
