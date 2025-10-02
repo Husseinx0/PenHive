@@ -1,31 +1,75 @@
 #pragma once
 
 #include "Core/interfaces/IDatabase.hpp"
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
-#include <uuid/uuid.h>
+#include <libvirt/libvirt.h>
+#include <memory>
+#include <string>
+#include <mutex>
 
-class VirtualMachinePool : public IRocksDB
-{
+class HypervisorConnector {
 public:
-    VirtualMachinePool(/* args */);
-    ~VirtualMachinePool();
-    /**
-     * Function to allocate a new VM object
-     *
-     *
-     * @return 0 in sucuse
-     */
-    [[nodiscard]] int allocate(int data, std::string name);
-    void set(int data, std::string name);
+    HypervisorConnector() = delete;
+    explicit HypervisorConnector(std::shared_ptr<IRocksDB> db);
+    ~HypervisorConnector();
+
+    HypervisorConnector(const HypervisorConnector&) = delete;
+    HypervisorConnector& operator=(const HypervisorConnector&) = delete;
+
+    // اتصال/إدارة مقبض libvirt
+    bool connect(const std::string& uri = "qemu:///system") noexcept;
+    void connectOrThrow(const std::string& uri = "qemu:///system");
+    void close() noexcept;
+
+    [[nodiscard]] virConnectPtr getRawHandle() const noexcept;
+    [[nodiscard]] virConnectPtr ensureConnected();
+    [[nodiscard]] bool isConnected() const noexcept;
+    [[nodiscard]] std::shared_ptr<IRocksDB> getDB() const noexcept;
 
 private:
-    [[nodiscard]] std::string generate_uuid()
-    {
-        using namespace boost;
-        uuids::random_generator gen;
-        uuids::uuid u = gen();
-        return uuids::to_string(u);
-    }
+    mutable std::mutex mutex_;
+    virConnectPtr conn{nullptr};
+    std::shared_ptr<IRocksDB> db;
+};
+			virErrorPtr e = virGetLastError();
+			throw std::runtime_error(std::string("libvirt: connect failed: ") + (e && e->message ? e->message : "unknown"));
+		}
+	}
+
+	// إغلاق الاتصال (آمن متزامنًا)
+	void close() noexcept {
+		std::scoped_lock lock(mutex_);
+		if (conn) {
+			virConnectClose(conn);
+			conn = nullptr;
+		}
+	}
+
+	// الحصول على المقبض الخام لاستخدام libvirt؛ يعيد nullptr اذا لم يكن متصلًا
+	[[nodiscard]] virConnectPtr getRawHandle() const noexcept {
+		return conn;
+	}
+
+	// ضمان الاتصال وإرجاع المقبض أو رمي استثناء
+	[[nodiscard]] virConnectPtr ensureConnected() {
+		std::scoped_lock lock(mutex_);
+		if (!conn) {
+			lock.unlock();
+			connectOrThrow();
+			lock.lock();
+		}
+		return conn;
+	}
+
+	[[nodiscard]] bool isConnected() const noexcept {
+		return conn != nullptr;
+	}
+
+	[[nodiscard]] std::shared_ptr<IRocksDB> getDB() const noexcept {
+		return db;
+	}
+
+private:
+	mutable std::mutex mutex_;
+	virConnectPtr conn{nullptr};
+	std::shared_ptr<IRocksDB> db;
 };

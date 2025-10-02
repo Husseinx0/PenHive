@@ -5,44 +5,44 @@
 #include <string>
 #include <vector>
 #include <source_location>
-#include <ranges>
-#include <format>
-#include <algorithm>
-#include <array>
-#include <span>
 #include <string_view>
 #include <utility>
-#include <concepts>
 
 namespace nlohmann {
     using json = nlohmann::json;
 }
 
 /**
- * @brief Modern JSON template class using pure nlohmann::json with C++23 features
- * 
- * This implementation:
- * - Uses nlohmann::json directly without any intermediate Attribute classes
- * - Follows C++23 best practices and modern language features
- * - Implements proper error handling with std::expected
- * - Uses range-based algorithms for efficient data processing
- * - Provides type-safe operations for JSON data
+ * Modern JSON template class using nlohmann::json with C++23 features.
+ * Interface only — implementation lives in src/Template/Template.cpp
  */
 class Template {
 public:
     Template() = default;
 
-    /**
-     * @brief Parse JSON string with source location tracking for errors
-     * @param json_str Input JSON string
-     * @param loc Source location for error reporting (default: call site)
-     * @return std::expected<void, std::string> with detailed error message
-     */
     [[nodiscard]] std::expected<void, std::string> parse(
         std::string_view json_str,
         std::source_location loc = std::source_location::current()
     ) noexcept;
 
+    [[nodiscard]] std::string to_string() const;
+
+    void set(std::string key, nlohmann::json value);
+    void add(std::string key, nlohmann::json value);
+    [[nodiscard]] std::optional<nlohmann::json> get(std::string_view key) const;
+    [[nodiscard]] std::vector<nlohmann::json> get_all(std::string_view key) const;
+    [[nodiscard]] bool remove(std::string_view key);
+    [[nodiscard]] bool empty() const;
+    void merge(const Template& other);
+    void encrypt(const std::string& key);
+    void decrypt(const std::string& key);
+
+private:
+    nlohmann::json data;
+    [[nodiscard]] bool is_sensitive_field(std::string_view key) const;
+    [[nodiscard]] std::string encrypt_string(std::string_view plain, std::string_view key) const;
+    [[nodiscard]] std::string decrypt_string(std::string_view encrypted, std::string_view key) const;
+};
     /**
      * @brief Convert to JSON string with pretty printing (4-space indentation)
      * @return Formatted JSON string

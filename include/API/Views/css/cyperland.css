@@ -1,0 +1,918 @@
+:root {
+  --primary-color: #4361ee;
+  --primary-light: #4895ef;
+  --secondary-color: #3f37c9;
+  --accent-color: #f72585;
+  --success-color: #4cc9f0;
+  --warning-color: #f8961e;
+  --danger-color: #f94144;
+  --dark-bg: #121212;
+  --dark-card: #1e1e1e;
+  --dark-text: #e0e0e0;
+  --dark-muted: #a0a0a0;
+  --grid-color: rgba(224, 224, 224, 0.2);
+  --grid-dark-color: rgba(51, 51, 51, 0.3);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body {
+  font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fc;
+  overflow-x: hidden;
+  transition: var(--transition);
+  color: #2b2d42;
+  line-height: 1.6;
+}
+
+body.dark-mode {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* تحسينات عامة */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* لوحة التحكم العلوية */
+.dashboard {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 0 0 1.5rem 1.5rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 100;
+}
+
+.dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+  opacity: 0.3;
+}
+
+.logo {
+  background: rgba(255, 255, 255, 0.15);
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* بطاقات الإحصائيات */
+.stat-card {
+  border-radius: 1rem !important;
+  overflow: hidden;
+  transition: var(--transition);
+  height: 120px;
+  position: relative;
+  border: none !important;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .stat-card {
+  background: rgba(30, 30, 30, 0.5) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ألوان متدرجة للبطاقات */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%) !important;
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, var(--success-color) 0%, #4895ef 100%) !important;
+}
+
+.bg-gradient-info {
+  background: linear-gradient(135deg, #3a86ff 0%, #4cc9f0 100%) !important;
+}
+
+/* تحسينات قسم رفع الملفات */
+.upload-section {
+  border: 2px dashed transparent;
+  transition: var(--transition);
+}
+
+.upload-section.drag-over {
+  border-color: var(--primary-color);
+  background-color: rgba(67, 97, 238, 0.05);
+}
+
+.upload-area {
+  cursor: pointer;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  background: rgba(248, 249, 250, 0.5);
+  transition: var(--transition);
+  border: 2px dashed #dee2e6;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-mode .upload-area {
+  background: rgba(30, 30, 30, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+  background: rgba(67, 97, 238, 0.03);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .upload-area:hover {
+  background: rgba(67, 97, 238, 0.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.upload-area.drag-over {
+  border-color: var(--primary-color);
+  background: rgba(67, 97, 238, 0.1);
+  transform: scale(1.02);
+}
+
+.upload-placeholder {
+  transition: var(--transition);
+}
+
+.upload-area.drag-over .upload-placeholder {
+  transform: scale(1.05);
+}
+
+.upload-area.drag-over .upload-placeholder i {
+  color: var(--primary-color) !important;
+  animation: bounce 1s infinite;
+}
+
+.upload-progress {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* تأثيرات الظل المحسنة */
+.upload-section {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.dark-mode .upload-section {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* تحسينات التقدم */
+.progress {
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .progress {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  transition: width 0.3s ease;
+}
+
+/* تحسينات النص */
+.upload-status {
+  font-weight: 500;
+}
+
+/* تأثيرات التركيز */
+.upload-area:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+/* تحسينات الاستجابة */
+@media (max-width: 768px) {
+  .upload-area {
+    padding: 1.5rem;
+  }
+  
+  .upload-placeholder i {
+    font-size: 2rem !important;
+  }
+}
+
+/* لوحة الأجهزة */
+#devices-panel {
+  background-color: #fff;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode #devices-panel {
+  background-color: var(--dark-card);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.device-category {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  transition: var(--transition);
+  margin-bottom: 1rem;
+}
+
+.dark-mode .device-category {
+  background-color: rgba(30, 30, 30, 0.5);
+}
+
+/* عناصر الأجهزة */
+.device-item {
+  cursor: grab;
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 1rem !important;
+  margin-bottom: 1rem !important;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .device-item {
+  background: rgba(30, 30, 30, 0.7);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.device-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+  border-color: var(--primary-color);
+}
+
+.device-icon-large {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: var(--transition);
+  background: rgba(67, 97, 238, 0.1);
+  font-size: 1.75rem;
+}
+
+.device-item:hover .device-icon-large {
+  transform: scale(1.1);
+}
+
+/* مساحة العمل */
+.workspace-container {
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  min-height: 750px;
+  padding: 40px;
+}
+
+.dark-mode .workspace-container {
+  background-color: var(--dark-card);
+  background-image:
+    linear-gradient(var(--grid-dark-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-dark-color) 1px, transparent 1px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* أيقونات الأجهزة في مساحة العمل */
+.device-icon {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  cursor: move;
+  transition: var(--transition);
+  z-index: 10;
+  border: 2px solid transparent;
+  user-select: none;
+  font-size: 1.75rem;
+}
+
+.dark-mode .device-icon {
+  background: rgba(30, 30, 30, 0.8);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.device-icon:hover {
+  transform: scale(1.1);
+  z-index: 20;
+  border-color: var(--primary-color);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.device-icon.selected {
+  box-shadow: 0 0 0 3px var(--primary-color), 0 12px 24px rgba(0, 0, 0, 0.15);
+  z-index: 15;
+}
+
+.dark-mode .device-icon.selected {
+  box-shadow: 0 0 0 3px var(--primary-light), 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ألوان الأجهزة */
+.router-icon { color: var(--primary-color); }
+.switch-icon { color: var(--success-color); }
+.pc-icon { color: #4cc9f0; }
+.server-icon { color: var(--warning-color); }
+.laptop-icon { color: var(--danger-color); }
+.wireless-icon { color: #7209b7; }
+.cable-icon { color: #6c757d; }
+
+/* تأثيرات السحب */
+.dragging {
+  opacity: 0.9;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+  z-index: 100 !important;
+  transform: scale(1.05);
+  cursor: grabbing;
+}
+
+/* خطوط الاتصال */
+.connection-line {
+  stroke: var(--primary-color);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.dark-mode .connection-line {
+  stroke: var(--primary-light);
+}
+
+.connection-line.temp {
+  stroke-dasharray: 6 6;
+  stroke-width: 3;
+  stroke: rgba(34, 34, 34, 0.35);
+}
+
+.dark-mode .connection-line.temp {
+  stroke: rgba(255, 255, 255, 0.2);
+}
+
+.connection-line:hover {
+  stroke: var(--success-color);
+  filter: drop-shadow(0 0 6px rgba(67, 97, 238, 0.4));
+}
+
+.connection-line.selected {
+  stroke: var(--accent-color);
+  stroke-width: 5;
+  filter: drop-shadow(0 0 8px rgba(247, 37, 133, 0.6));
+}
+
+/* العناصر النصية */
+.text-muted {
+  transition: color 0.3s ease;
+}
+
+.dark-mode .text-muted {
+  color: var(--dark-muted) !important;
+}
+
+/* تأثيرات الحركة */
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animated-icon {
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+.animated {
+  animation: fadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* تأثيرات التحميل */
+.device-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  z-index: 11;
+}
+
+.dark-mode .device-loading {
+  background: rgba(30, 30, 30, 0.8);
+}
+
+.device-loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(67, 97, 238, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.device-pop-in {
+  animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* تسميات الأجهزة */
+.device-label {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.dark-mode .device-label {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--dark-text);
+}
+
+.device-icon:hover .device-label {
+  opacity: 1;
+  bottom: -20px;
+}
+
+/* زر حذف الكابل */
+.cable-delete {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e74a3b;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  font-size: 12px;
+  pointer-events: auto;
+  transition: var(--transition);
+}
+
+.cable-delete:hover {
+  transform: scale(1.2);
+  background: #c53030;
+}
+
+/* شريط التمرير */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* تأثيرات الظل */
+.shadow-sm { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important; }
+.shadow { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important; }
+.shadow-lg { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important; }
+
+.dark-mode .shadow-sm { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important; }
+.dark-mode .shadow { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important; }
+.dark-mode .shadow-lg { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important; }
+
+/* تأثيرات المكان النائب */
+#workspace-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+  width: 100%;
+  max-width: 400px;
+}
+
+.dark-mode #workspace-placeholder {
+  color: var(--dark-muted);
+}
+
+/* وسيلة مساعدة الكابل */
+.cable-tool {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cable-tool.active {
+  opacity: 1;
+}
+
+.cable-tool::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed var(--primary-color);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  70% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* وسيلة مساعدة المحاذاة */
+.alignment-guide {
+  position: absolute;
+  background-color: rgba(67, 97, 238, 0.4);
+  z-index: 50;
+  transition: all 0.1s ease;
+}
+
+.alignment-guide-horizontal {
+  width: 100%;
+  height: 2px;
+}
+
+.alignment-guide-vertical {
+  height: 100%;
+  width: 2px;
+}
+
+/* تأثيرات الفشل */
+.device-failure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 235, 235, 0.9);
+  border-radius: 10px;
+  z-index: 11;
+  color: var(--danger-color);
+  font-size: 24px;
+  animation: shake 0.5s ease-in-out;
+}
+
+.dark-mode .device-failure {
+  background: rgba(70, 0, 0, 0.7);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+/* وسيلة مساعدة نظام التشغيل */
+.device-os-badge {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  z-index: 20;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* أنماط وضع الاتصال المحسنة */
+.connecting-mode {
+    cursor: crosshair !important;
+}
+
+.connecting-mode .device-icon {
+    cursor: crosshair;
+}
+
+.connecting-mode .device-icon:not(.connecting-source):hover {
+    border-color: var(--success-color) !important;
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.3) !important;
+}
+
+/* تأثيرات الجهاز المصدر والهدف المحسنة */
+.device-icon.connecting-source {
+    animation: pulse-connection 2s infinite;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.5) !important;
+    z-index: 25 !important;
+}
+
+.device-icon.connection-target {
+    border-color: var(--success-color) !important;
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.5) !important;
+    transform: scale(1.05);
+    z-index: 20 !important;
+}
+
+@keyframes pulse-connection {
+    0%, 100% { 
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.5);
+    }
+    50% { 
+        box-shadow: 0 0 0 6px rgba(67, 97, 238, 0.3);
+    }
+}
+
+/* أداة الكابل المتحركة المحسنة */
+.cable-tool {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    font-size: 14px;
+}
+
+.cable-tool.active {
+    opacity: 1;
+    transform: scale(1);
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.05); }
+}
+
+/* الخط المؤقت المتحسن */
+.connection-line.temp {
+    stroke: var(--primary-color);
+    stroke-width: 3;
+    stroke-dasharray: 6 6;
+    animation: dash-move 1s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes dash-move {
+    to {
+        stroke-dashoffset: -12;
+    }
+}
+
+/* تلميحات السياق المحسنة */
+.device-context-menu .context-item[data-action="connect"] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.device-context-menu .context-item[data-action="connect"] small {
+    font-size: 0.7em;
+    opacity: 0.6;
+}
+
+/* تحسينات الشارات */
+.device-os-badge {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    z-index: 20;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* تحسينات التحميل */
+.device-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    z-index: 11;
+}
+
+.dark-mode .device-loading {
+    background: rgba(30, 30, 30, 0.9);
+}
+
+.device-loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(67, 97, 238, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+/* تحسينات لوحة الخصائص */
+.properties-list {
+    font-size: 0.9rem;
+}
+
+.property-item {
+    padding: 4px 0;
+}
+
+.properties-actions {
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+}
+
+.dark-mode .properties-actions {
+    border-top-color: #444;
+}
+
+/* تحسينات الاستجابة */
+@media (max-width: 768px) {
+    #devices-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: auto;
+        max-height: 50vh;
+        z-index: 1000;
+    }
+    
+    .device-context-menu,
+    .context-menu {
+        min-width: 200px !important;
+        font-size: 12px !important;
+    }
+}
+
+/* تحسينات التحديد */
+.device-icon.selected {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3) !important;
+    z-index: 15;
+}
+
+.connection-line.selected {
+    stroke: var(--accent-color) !important;
+    stroke-width: 5 !important;
+    filter: drop-shadow(0 0 8px rgba(247, 37, 133, 0.6));
+}
+
+/* تحسينات السحب */
+.device-icon.dragging {
+    opacity: 0.9;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+    z-index: 100 !important;
+    transform: scale(1.05);
+    cursor: grabbing !important;
+}
+
+/* تأثيرات الظل المحسنة */
+.shadow-depth-1 { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important; }
+.shadow-depth-2 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important; }
+.shadow-depth-3 { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important; }
+
+.dark-mode .shadow-depth-1 { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important; }
+.dark-mode .shadow-depth-2 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important; }
+.dark-mode .shadow-depth-3 { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important; }

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شبكة محاكاة احترافية</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/cyperland.css">
+</head>
+
+<body>
+  <!-- لوحة التحكم العلوية -->
+  <div class="dashboard py-3">
+    <div class="container-fluid">
+      <div class="row align-items-center mb-3">
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <div class="logo me-3">
+              <i class="fas fa-network-wired fa-2x text-white"></i>
+            </div>
+            <div>
+              <h3 class="text-white mb-0">شبكة محاكاة احترافية</h3>
+              <small class="text-white-50">إصدار 2.0</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-end">
+            <div class="btn-group me-3">
+              <button id="saveProject" class="btn btn-light btn-sm">
+                <i class="fas fa-save me-1"></i> حفظ
+              </button>
+              <button id="loadProject" class="btn btn-light btn-sm">
+                <i class="fas fa-folder-open me-1"></i> تحميل
+              </button>
+            </div>
+            <div class="btn-group">
+              <button id="resetWorkspace" class="btn btn-outline-light btn-sm me-2">
+                <i class="fas fa-redo me-1"></i> إعادة تعيين
+              </button>
+              <button id="zoomIn" class="btn btn-outline-light btn-sm me-2">
+                <i class="fas fa-search-plus"></i>
+              </button>
+              <button id="zoomOut" class="btn btn-outline-light btn-sm">
+                <i class="fas fa-search-minus"></i>
+              </button>
+            </div>
+            <div class="form-check form-switch ms-3 d-flex align-items-center">
+              <input class="form-check-input" type="checkbox" id="darkModeToggle">
+              <label class="form-check-label text-white" for="darkModeToggle">
+                <i class="fas fa-moon"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- بطاقات الإحصائيات -->
+      <div class="row gx-3">
+        <div class="col-md-4 mb-2">
+          <div class="card stat-card bg-gradient-primary text-white h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-microchip me-2 fs-4"></i>
+                    <h6 class="card-subtitle mb-0">وحدة المعالجة</h6>
+                  </div>
+                  <div class="progress mt-2" style="height: 8px;">
+                    <div id="cpu-progress" class="progress-bar bg-white" role="progressbar"></div>
+                  </div>
+                </div>
+                <div class="display-6 fw-bold" id="cpu">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-2">
+          <div class="card stat-card bg-gradient-success text-white h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-memory me-2 fs-4"></i>
+                    <h6 class="card-subtitle mb-0">الذاكرة</h6>
+                  </div>
+                  <div class="progress mt-2" style="height: 8px;">
+                    <div id="ram-progress" class="progress-bar bg-white" role="progressbar"></div>
+                  </div>
+                </div>
+                <div class="display-6 fw-bold" id="ram">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-2">
+          <div class="card stat-card bg-gradient-info text-white h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-sitemap me-2 fs-4"></i>
+                    <h6 class="card-subtitle mb-0">عدد الأجهزة</h6>
+                  </div>
+                  <div class="d-flex align-items-center mt-1">
+                    <div class="spinner-grow spinner-grow-sm text-white me-2" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <small>تحديث تلقائي</small>
+                  </div>
+                </div>
+                <div class="display-6 fw-bold" id="device-count">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="container-fluid mt-3">
+    <div class="row">
+      <!-- مكتبة الأجهزة -->
+      <div class="col-md-2 p-3" id="devices-panel">
+         <!-- ملفات الرفع -->
+        <div class="upload-section bg-white rounded-3 shadow-sm p-3 mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 text-primary d-flex align-items-center">
+              <i class="fas fa-upload me-2"></i> رفع الملفات
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" id="toggleUpload">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          
+          <div id="uploadArea" class="upload-area">
+            <div class="upload-placeholder text-center">
+              <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+              <p class="text-muted mb-2">اسحب الملفات هنا أو انقر للرفع</p>
+              <small class="text-muted">يدعم JSON, XML, الصور</small>
+            </div>
+            <input type="file" id="fileInput" multiple style="display: none;">
+          </div>
+          
+          <div id="uploadProgress" class="upload-progress mt-3" style="display: none;">
+            <div class="progress mb-2">
+              <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+            </div>
+            <small class="text-muted upload-status">جاري الرفع...</small>
+          </div>
+        </div>
+        <div class="devices-library bg-white rounded-3 shadow-sm p-3 mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 text-primary">
+              <i class="fas fa-hdd me-2"></i> مكتبة الأجهزة
+            </h5>
+            <button class="btn btn-sm btn-outline-secondary" id="toggleDevices">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+
+          <!-- أجهزة الشبكة -->
+          <div class="device-category mb-3">
+            <h6 class="text-muted mb-2">
+              <i class="fas fa-network-wired me-2"></i> أجهزة الشبكة
+            </h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="router">
+                  <div class="text-center">
+                    <div class="device-icon-large router-icon mb-2">
+                      <i class="fas fa-wifi fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">راوتر</h6>
+                    <small class="text-muted">جهاز توجيه</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="switch">
+                  <div class="text-center">
+                    <div class="device-icon-large switch-icon mb-2">
+                      <i class="fas fa-network-wired fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">سويتش</h6>
+                    <small class="text-muted">مبدل شبكة</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- أجهزة الحوسبة -->
+          <div class="device-category mb-3">
+            <h6 class="text-muted mb-2">
+              <i class="fas fa-desktop me-2"></i> أجهزة الحوسبة
+            </h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="pc">
+                  <div class="text-center">
+                    <div class="device-icon-large pc-icon mb-2">
+                      <i class="fas fa-desktop fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">كمبيوتر</h6>
+                    <small class="text-muted">جهاز كمبيوتر</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="server">
+                  <div class="text-center">
+                    <div class="device-icon-large server-icon mb-2">
+                      <i class="fas fa-server fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">سيرفر</h6>
+                    <small class="text-muted">خادم شبكة</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="laptop">
+                  <div class="text-center">
+                    <div class="device-icon-large laptop-icon mb-2">
+                      <i class="fas fa-laptop fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">لابتوب</h6>
+                    <small class="text-muted">كمبيوتر محمول</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="tablet">
+                  <div class="text-center">
+                    <div class="device-icon-large tablet-icon mb-2">
+                      <i class="fas fa-tablet-alt fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">جهاز لوحي</h6>
+                    <small class="text-muted">تابلت</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- أجهزة لاسلكية -->
+          <div class="device-category">
+            <h6 class="text-muted mb-2">
+              <i class="fas fa-wifi me-2"></i> أجهزة لاسلكية
+            </h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="wireless">
+                  <div class="text-center">
+                    <div class="device-icon-large wireless-icon mb-2">
+                      <i class="fas fa-wifi fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">واي فاي</h6>
+                    <small class="text-muted">نقطة وصول</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="device-item p-2 bg-light rounded-3 shadow-sm" draggable="true" data-type="cable">
+                  <div class="text-center">
+                    <div class="device-icon-large cable-icon mb-2">
+                      <i class="fas fa-plug fa-2x"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0">كابل</h6>
+                    <small class="text-muted">لربط الأجهزة</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- لوحة خصائص الجهاز -->
+        <div class="device-properties bg-white rounded-3 shadow-sm p-3">
+          <h5 class="mb-3 text-primary">
+            <i class="fas fa-cog me-2"></i> خصائص الجهاز
+          </h5>
+          <div id="device-properties-content">
+            <div class="text-center text-muted py-4">
+              <i class="fas fa-mouse-pointer fa-2x mb-2"></i>
+              <p>اختر جهازاً لعرض خصائصه</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- مساحة العمل الرئيسية -->
+      <div class="col-md-10 p-4" id="workspace">
+        <div class="workspace-container border rounded-4 bg-light shadow-sm">
+          <div id="workspace-placeholder" class="text-center text-muted">
+            <i class="fas fa-project-diagram fa-5x mb-4 opacity-25 animated-icon"></i>
+            <h4 class="fw-bold mb-2">اسحب الأجهزة هنا لإنشاء شبكتك</h4>
+            <p class="text-muted fs-5">يمكنك سحب الأجهزة من القائمة الجانبية وإفلاتها في هذه المنطقة</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نموذج لتحميل الملفات -->
+  <input type="file" id="loadFile" accept=".json" style="display: none;">
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JS -->
+  <script src="js/core/networkDesigner.js"></script>
+  <script src="js/core/device.js"></script>
+  <script src="js/core/cable.js"></script>
+  <script src="js/core/ioManager.js"></script>
+  <script src="js/core/xmlRPCservice.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

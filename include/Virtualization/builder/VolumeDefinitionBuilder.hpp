@@ -19,3 +19,13 @@ public:
 
     [[nodiscard]] std::string build();
 };
+/*  const char* volumeXML = 
+        "<volume>"
+        "  <name>my_new_volume.img</name>"
+        "  <capacity unit='GiB'>20</capacity>"
+        "  <target>"
+        "    <format type='qcow2'/>"
+        "  </target>"
+        "</volume>";
+
+    virStorageVolPtr newVol = virStorageVolCreateXML(pool, volumeXML, 0);*/
